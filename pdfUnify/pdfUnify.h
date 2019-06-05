@@ -24,6 +24,8 @@ public:
     void addFiles(const QStringList newFiles);
     void removeFile(const QString file);
     void removeAllFiles();
+    void upFile(const QString file);
+    void downFile(const QString file);
     QStringList getFiles();
     void save();
 private:

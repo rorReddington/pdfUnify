@@ -8,7 +8,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     setWindowFlags(Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
+    setMinimumWidth(633);
+    setMinimumHeight(406);
+    setMaximumWidth(633);
+    setMaximumHeight(406);
+    setWindowTitle("pdfUnify");
     ui->label->setHidden(true);
+    ui->pushButtonRemoveFile->setEnabled(false);
+    ui->pushButtonRemoveAll->setEnabled(false);
+    ui->pushButtonStart->setEnabled(false);
+    ui->pushButtonUp->setEnabled(false);
+    ui->pushButtonDown->setEnabled(false);
 
     QStringList headers;
     headers.append("Имя");
@@ -27,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButtonRemoveFile, &QPushButton::released, this, &MainWindow::removeFileSlot);
     connect(ui->toolButtonSelect, &QToolButton::released, this, &MainWindow::selectOuputFileSlot);
     connect(ui->pushButtonStart, &QToolButton::released, this, &MainWindow::startSlot);
+    connect(ui->pushButtonUp, &QToolButton::released, this, &MainWindow::upSlot);
+    connect(ui->pushButtonDown, &QToolButton::released, this, &MainWindow::downSlot);
 }
 
 MainWindow::~MainWindow()
@@ -59,7 +71,21 @@ void MainWindow::updateTreeWidget()
     {
         ui->label->setText(QString("Всего %1 файлов в работе").arg(files.count()));
         ui->label->setHidden(false);
-    } else ui->label->setHidden(true);
+        ui->pushButtonRemoveFile->setEnabled(true);
+        ui->pushButtonRemoveAll->setEnabled(true);
+        ui->pushButtonStart->setEnabled(true);
+        ui->pushButtonUp->setEnabled(true);
+        ui->pushButtonDown->setEnabled(true);
+    }
+    else
+    {
+        ui->label->setHidden(true);
+        ui->pushButtonRemoveFile->setEnabled(false);
+        ui->pushButtonRemoveAll->setEnabled(false);
+        ui->pushButtonStart->setEnabled(false);
+        ui->pushButtonUp->setEnabled(false);
+        ui->pushButtonDown->setEnabled(false);
+    }
 }
 
 void MainWindow::selectFilesSlot()
@@ -115,4 +141,24 @@ void MainWindow::saveCompleteSlot()
     QMessageBox messageBox;
     messageBox.information(this, "Завершено", "Cохранение завершено");
     messageBox.setFixedSize(800,400);
+}
+
+void MainWindow::upSlot()
+{
+    auto item = ui->treeWidget->currentItem();
+
+    if (item == nullptr) { return; }
+
+    pdf->upFile(item->text(1));
+    updateTreeWidget();
+}
+
+void MainWindow::downSlot()
+{
+    auto item = ui->treeWidget->currentItem();
+
+    if (item == nullptr) { return; }
+
+    pdf->downFile(item->text(1));
+    updateTreeWidget();
 }

@@ -35,6 +35,22 @@ QStringList PDFUnify::getFiles()
     return _files;
 }
 
+void PDFUnify::upFile(const QString file)
+{
+    auto index = _files.indexOf(file);
+    auto newIndex = index-1;
+
+    if (newIndex >= 0) { _files.move(index, newIndex); }
+}
+
+void PDFUnify::downFile(const QString file)
+{
+    auto index = _files.indexOf(file);
+    auto newIndex = index+1;
+
+    if (newIndex < _files.count()) { _files.move(index, newIndex); }
+}
+
 bool PDFUnify::fileExists(const QString path)
 {
     QFileInfo check_file(path);

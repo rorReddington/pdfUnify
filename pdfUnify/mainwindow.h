@@ -28,6 +28,8 @@ public slots:
     void selectOuputFileSlot();
     void startSlot();
     void saveCompleteSlot();
+    void upSlot();
+    void downSlot();
 
 private:
     Ui::MainWindow *ui;
